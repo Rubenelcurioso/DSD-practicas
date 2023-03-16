@@ -10,15 +10,13 @@
 static struct timeval TIMEOUT = { 25, 0 };
 
 float *
-sum_1(float arg1, float arg2,  CLIENT *clnt)
+suma_1(operandos arg1,  CLIENT *clnt)
 {
-	sum_1_argument arg;
 	static float clnt_res;
 
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
-	arg.arg1 = arg1;
-	arg.arg2 = arg2;
-	if (clnt_call (clnt, SUM, (xdrproc_t) xdr_sum_1_argument, (caddr_t) &arg,
+	if (clnt_call (clnt, SUMA,
+		(xdrproc_t) xdr_operandos, (caddr_t) &arg1,
 		(xdrproc_t) xdr_float, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);

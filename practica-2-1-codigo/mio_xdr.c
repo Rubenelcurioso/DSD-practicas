@@ -6,11 +6,13 @@
 #include "mio.h"
 
 bool_t
-xdr_sum_1_argument (XDR *xdrs, sum_1_argument *objp)
+xdr_operandos (XDR *xdrs, operandos *objp)
 {
-	 if (!xdr_float (xdrs, &objp->arg1))
+	register int32_t *buf;
+
+	 if (!xdr_float (xdrs, &objp->operando1))
 		 return FALSE;
-	 if (!xdr_float (xdrs, &objp->arg2))
+	 if (!xdr_float (xdrs, &objp->operando2))
 		 return FALSE;
 	return TRUE;
 }

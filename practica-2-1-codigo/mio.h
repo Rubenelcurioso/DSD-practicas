@@ -14,35 +14,35 @@ extern "C" {
 #endif
 
 
-struct sum_1_argument {
-	float arg1;
-	float arg2;
+struct operandos {
+	float operando1;
+	float operando2;
 };
-typedef struct sum_1_argument sum_1_argument;
+typedef struct operandos operandos;
 
-#define SUMPROG 0x20000001
-#define SUMVER 1
+#define CALCULADORA_BASICA 0x20000001
+#define BASICA_1 1
 
 #if defined(__STDC__) || defined(__cplusplus)
-#define SUM 1
-extern  float * sum_1(float , float , CLIENT *);
-extern  float * sum_1_svc(float , float , struct svc_req *);
-extern int sumprog_1_freeresult (SVCXPRT *, xdrproc_t, caddr_t);
+#define SUMA 1
+extern  float * suma_1(operandos , CLIENT *);
+extern  float * suma_1_svc(operandos , struct svc_req *);
+extern int calculadora_basica_1_freeresult (SVCXPRT *, xdrproc_t, caddr_t);
 
 #else /* K&R C */
-#define SUM 1
-extern  float * sum_1();
-extern  float * sum_1_svc();
-extern int sumprog_1_freeresult ();
+#define SUMA 1
+extern  float * suma_1();
+extern  float * suma_1_svc();
+extern int calculadora_basica_1_freeresult ();
 #endif /* K&R C */
 
 /* the xdr functions */
 
 #if defined(__STDC__) || defined(__cplusplus)
-extern  bool_t xdr_sum_1_argument (XDR *, sum_1_argument*);
+extern  bool_t xdr_operandos (XDR *, operandos*);
 
 #else /* K&R C */
-extern bool_t xdr_sum_1_argument ();
+extern bool_t xdr_operandos ();
 
 #endif /* K&R C */
 

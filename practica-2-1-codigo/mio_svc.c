@@ -17,16 +17,16 @@
 #endif
 
 static float *
-_sum_1 (sum_1_argument *argp, struct svc_req *rqstp)
+_suma_1 (operandos  *argp, struct svc_req *rqstp)
 {
-	return (sum_1_svc(argp->arg1, argp->arg2, rqstp));
+	return (suma_1_svc(*argp, rqstp));
 }
 
 static void
-sumprog_1(struct svc_req *rqstp, register SVCXPRT *transp)
+calculadora_basica_1(struct svc_req *rqstp, register SVCXPRT *transp)
 {
 	union {
-		sum_1_argument sum_1_arg;
+		operandos suma_1_arg;
 	} argument;
 	char *result;
 	xdrproc_t _xdr_argument, _xdr_result;
@@ -37,10 +37,10 @@ sumprog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 		(void) svc_sendreply (transp, (xdrproc_t) xdr_void, (char *)NULL);
 		return;
 
-	case SUM:
-		_xdr_argument = (xdrproc_t) xdr_sum_1_argument;
+	case SUMA:
+		_xdr_argument = (xdrproc_t) xdr_operandos;
 		_xdr_result = (xdrproc_t) xdr_float;
-		local = (char *(*)(char *, struct svc_req *)) _sum_1;
+		local = (char *(*)(char *, struct svc_req *)) _suma_1;
 		break;
 
 	default:
@@ -68,15 +68,15 @@ main (int argc, char **argv)
 {
 	register SVCXPRT *transp;
 
-	pmap_unset (SUMPROG, SUMVER);
+	pmap_unset (CALCULADORA_BASICA, BASICA_1);
 
 	transp = svcudp_create(RPC_ANYSOCK);
 	if (transp == NULL) {
 		fprintf (stderr, "%s", "cannot create udp service.");
 		exit(1);
 	}
-	if (!svc_register(transp, SUMPROG, SUMVER, sumprog_1, IPPROTO_UDP)) {
-		fprintf (stderr, "%s", "unable to register (SUMPROG, SUMVER, udp).");
+	if (!svc_register(transp, CALCULADORA_BASICA, BASICA_1, calculadora_basica_1, IPPROTO_UDP)) {
+		fprintf (stderr, "%s", "unable to register (CALCULADORA_BASICA, BASICA_1, udp).");
 		exit(1);
 	}
 
@@ -85,8 +85,8 @@ main (int argc, char **argv)
 		fprintf (stderr, "%s", "cannot create tcp service.");
 		exit(1);
 	}
-	if (!svc_register(transp, SUMPROG, SUMVER, sumprog_1, IPPROTO_TCP)) {
-		fprintf (stderr, "%s", "unable to register (SUMPROG, SUMVER, tcp).");
+	if (!svc_register(transp, CALCULADORA_BASICA, BASICA_1, calculadora_basica_1, IPPROTO_TCP)) {
+		fprintf (stderr, "%s", "unable to register (CALCULADORA_BASICA, BASICA_1, tcp).");
 		exit(1);
 	}
 
