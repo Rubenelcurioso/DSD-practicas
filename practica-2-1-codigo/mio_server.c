@@ -21,9 +21,7 @@ resta_1_svc(operandos arg1,  struct svc_req *rqstp)
 {
 	static float  result;
 
-	/*
-	 * insert server code here
-	 */
+	result=arg1.operando1-arg1.operando2;
 
 	return &result;
 }
@@ -33,9 +31,7 @@ multiplica_1_svc(operandos arg1,  struct svc_req *rqstp)
 {
 	static float  result;
 
-	/*
-	 * insert server code here
-	 */
+	result=arg1.operando1*arg1.operando2;
 
 	return &result;
 }
@@ -45,9 +41,7 @@ divide_1_svc(operandos arg1,  struct svc_req *rqstp)
 {
 	static float  result;
 
-	/*
-	 * insert server code here
-	 */
+	result=arg1.operando1/arg1.operando2;
 
 	return &result;
 }
