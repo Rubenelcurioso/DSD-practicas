@@ -7,11 +7,12 @@
 #include "mio.h"
 
 
-void calculadora_basica_1(char *host, operandos componentes)
+void
+calculadora_basica_1(char *host, operandos componentes, int operacion)
 {
 	CLIENT *clnt;
 	float  *result_1;
-	operandos suma_1_arg1=componentes;
+	operandos composed=componentes;
 
 #ifndef	DEBUG
 	clnt = clnt_create (host, CALCULADORA_BASICA, BASICA_1, "udp");
@@ -25,8 +26,16 @@ void calculadora_basica_1(char *host, operandos componentes)
 	if (result_1 == (float *) NULL) {
 		clnt_perror (clnt, "call failed");
 	}
-
-	printf("%f+%f=%f",suma_1_arg1.operando1,suma_1_arg1.operando2,*result_1);
+	
+	switch (operacion)
+	{
+	case 1:
+		printf("%f+%f=%f",composed.operando1,composed.operando2,*result_1);
+		break;
+	
+	default:
+		break;
+	}
 
 #ifndef	DEBUG
 	clnt_destroy (clnt);
@@ -42,7 +51,8 @@ void menu_basic(int *op, operandos *comp){//Menú interactivo
 	scanf("%f %f",&comp->operando1,&comp->operando2);
 }
 
-int main (int argc, char *argv[])
+int
+main (int argc, char *argv[])
 {
 	char *host;
 
@@ -54,7 +64,8 @@ int main (int argc, char *argv[])
 	int operacion;
 	operandos componentes;
 	menu_basic(&operacion,&componentes);
+
 	host = argv[1];
-	calculadora_basica_1 (host,componentes);
+	calculadora_basica_1 (host,componentes,operacion);
 exit (0);
 }

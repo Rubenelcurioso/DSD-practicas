@@ -15,3 +15,39 @@ suma_1_svc(operandos arg1,  struct svc_req *rqstp)
 
 	return &result;
 }
+
+float *
+resta_1_svc(operandos arg1,  struct svc_req *rqstp)
+{
+	static float  result;
+
+	/*
+	 * insert server code here
+	 */
+
+	return &result;
+}
+
+float *
+multiplica_1_svc(operandos arg1,  struct svc_req *rqstp)
+{
+	static float  result;
+
+	/*
+	 * insert server code here
+	 */
+
+	return &result;
+}
+
+float *
+divide_1_svc(operandos arg1,  struct svc_req *rqstp)
+{
+	static float  result;
+
+	/*
+	 * insert server code here
+	 */
+
+	return &result;
+}

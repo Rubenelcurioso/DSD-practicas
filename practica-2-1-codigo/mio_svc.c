@@ -22,11 +22,32 @@ _suma_1 (operandos  *argp, struct svc_req *rqstp)
 	return (suma_1_svc(*argp, rqstp));
 }
 
+static float *
+_resta_1 (operandos  *argp, struct svc_req *rqstp)
+{
+	return (resta_1_svc(*argp, rqstp));
+}
+
+static float *
+_multiplica_1 (operandos  *argp, struct svc_req *rqstp)
+{
+	return (multiplica_1_svc(*argp, rqstp));
+}
+
+static float *
+_divide_1 (operandos  *argp, struct svc_req *rqstp)
+{
+	return (divide_1_svc(*argp, rqstp));
+}
+
 static void
 calculadora_basica_1(struct svc_req *rqstp, register SVCXPRT *transp)
 {
 	union {
 		operandos suma_1_arg;
+		operandos resta_1_arg;
+		operandos multiplica_1_arg;
+		operandos divide_1_arg;
 	} argument;
 	char *result;
 	xdrproc_t _xdr_argument, _xdr_result;
@@ -41,6 +62,24 @@ calculadora_basica_1(struct svc_req *rqstp, register SVCXPRT *transp)
 		_xdr_argument = (xdrproc_t) xdr_operandos;
 		_xdr_result = (xdrproc_t) xdr_float;
 		local = (char *(*)(char *, struct svc_req *)) _suma_1;
+		break;
+
+	case RESTA:
+		_xdr_argument = (xdrproc_t) xdr_operandos;
+		_xdr_result = (xdrproc_t) xdr_float;
+		local = (char *(*)(char *, struct svc_req *)) _resta_1;
+		break;
+
+	case MULTIPLICA:
+		_xdr_argument = (xdrproc_t) xdr_operandos;
+		_xdr_result = (xdrproc_t) xdr_float;
+		local = (char *(*)(char *, struct svc_req *)) _multiplica_1;
+		break;
+
+	case DIVIDE:
+		_xdr_argument = (xdrproc_t) xdr_operandos;
+		_xdr_result = (xdrproc_t) xdr_float;
+		local = (char *(*)(char *, struct svc_req *)) _divide_1;
 		break;
 
 	default:
