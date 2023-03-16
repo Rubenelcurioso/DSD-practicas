@@ -21,44 +21,50 @@ void calculadora_basica_1(char *host, operandos componentes, int operacion)
 	}
 #endif /* DEBUG */
 
-	switch (operacion)
-	{
-	case 1:
-		result_1 = suma_1(composed, clnt);
-		if (result_1 == (float *)NULL)
+		
+	while(operacion!=0){
+		switch (operacion)
 		{
-			clnt_perror(clnt, "Llamada suma fallida");
-		}
-		printf("%f+%f=%f", composed.operando1, composed.operando2, *result_1);
-	break;
-	case 2:
-		result_1 = resta_1(composed,clnt);
-		if (result_1 == (float *)NULL)
-		{
-			clnt_perror(clnt, "Llamada resta fallida");
-		}
-		printf("%f-%f=%f", composed.operando1, composed.operando2, *result_1);
-	break;
-	case 3:
-		result_1 = multiplica_1(composed,clnt);
-		if (result_1 == (float *)NULL)
-		{
-			clnt_perror(clnt, "Llamada multiplicacion fallida");
-		}
-		printf("%fx%f=%f", composed.operando1, composed.operando2, *result_1);
-	break;
-	case 4:
-		if(composed.operando2==0) 
-			clnt_perror(clnt,"Ha divido entre 0!");
-		result_1 = divide_1(composed,clnt);
-		if (result_1 == (float *)NULL)
-		{
-			clnt_perror(clnt, "Llamada division fallida");
-		}
-		printf("%f/%f=%f", composed.operando1, composed.operando2, *result_1);
-	break;
-    default:
+		case 1:
+			result_1 = suma_1(composed, clnt);
+			if (result_1 == (float *)NULL)
+			{
+				clnt_perror(clnt, "Llamada suma fallida");
+			}
+			printf("%f+%f=%f\n", composed.operando1, composed.operando2, *result_1);
 		break;
+		case 2:
+			result_1 = resta_1(composed,clnt);
+			if (result_1 == (float *)NULL)
+			{
+				clnt_perror(clnt, "Llamada resta fallida");
+			}
+			printf("%f-%f=%f\n", composed.operando1, composed.operando2, *result_1);
+		break;
+		case 3:
+			result_1 = multiplica_1(composed,clnt);
+			if (result_1 == (float *)NULL)
+			{
+				clnt_perror(clnt, "Llamada multiplicacion fallida");
+			}
+			printf("%fx%f=%f\n", composed.operando1, composed.operando2, *result_1);
+		break;
+		case 4:
+			if(composed.operando2==0){
+				clnt_perror(clnt,"Ha divido entre 0!");
+				break;
+			}
+			result_1 = divide_1(composed,clnt);
+			if (result_1 == (float *)NULL)
+			{
+				clnt_perror(clnt, "Llamada division fallida");
+			}
+			printf("%f/%f=%f\n", composed.operando1, composed.operando2, *result_1);
+		break;
+		default:
+			break;
+		}
+		menu_basic(&operacion,&composed);
 	}
 
 #ifndef DEBUG
@@ -68,13 +74,13 @@ void calculadora_basica_1(char *host, operandos componentes, int operacion)
 
 void menu_basic(int *op, operandos *comp)
 { // Menú interactivo
-	printf("========Calculadora========\n");
+	printf("\n========Calculadora========\n");
 	printf("1. Suma\n");
 	printf("2. Resta\n");
 	printf("3. Multiplicacion\n");
 	printf("4. Division\n");
 	printf("\nEscoja una operación = ");
-	scanf("%d", &op);
+	scanf("%d", &(*op));
 	printf("\nIntroduzca los operandos espaciando => ");
 	scanf("%f %f", &comp->operando1, &comp->operando2);
 }
