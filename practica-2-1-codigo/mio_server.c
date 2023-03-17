@@ -11,7 +11,9 @@ suma_1_svc(operandos arg1,  struct svc_req *rqstp)
 {
 	static float  result;
 
-	result=arg1.operando1+arg1.operando2;
+	/*
+	 * insert server code here
+	 */
 
 	return &result;
 }
@@ -21,7 +23,9 @@ resta_1_svc(operandos arg1,  struct svc_req *rqstp)
 {
 	static float  result;
 
-	result=arg1.operando1-arg1.operando2;
+	/*
+	 * insert server code here
+	 */
 
 	return &result;
 }
@@ -31,7 +35,9 @@ multiplica_1_svc(operandos arg1,  struct svc_req *rqstp)
 {
 	static float  result;
 
-	result=arg1.operando1*arg1.operando2;
+	/*
+	 * insert server code here
+	 */
 
 	return &result;
 }
@@ -41,7 +47,33 @@ divide_1_svc(operandos arg1,  struct svc_req *rqstp)
 {
 	static float  result;
 
-	result=arg1.operando1/arg1.operando2;
+	/*
+	 * insert server code here
+	 */
+
+	return &result;
+}
+
+float *
+producto_escalar_1_svc(vectores3d arg1,  struct svc_req *rqstp)
+{
+	static float  result;
+
+	/*
+	 * insert server code here
+	 */
+
+	return &result;
+}
+
+VECTOR3D *
+producto_escalar_1_svc(vectores3d arg1,  struct svc_req *rqstp)
+{
+	static VECTOR3D  result;
+
+	/*
+	 * insert server code here
+	 */
 
 	return &result;
 }

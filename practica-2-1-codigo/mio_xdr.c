@@ -6,6 +6,32 @@
 #include "mio.h"
 
 bool_t
+xdr_VECTOR3D (XDR *xdrs, VECTOR3D *objp)
+{
+	register int32_t *buf;
+
+	 if (!xdr_float (xdrs, &objp->x))
+		 return FALSE;
+	 if (!xdr_float (xdrs, &objp->y))
+		 return FALSE;
+	 if (!xdr_float (xdrs, &objp->z))
+		 return FALSE;
+	return TRUE;
+}
+
+bool_t
+xdr_vectores3d (XDR *xdrs, vectores3d *objp)
+{
+	register int32_t *buf;
+
+	 if (!xdr_VECTOR3D (xdrs, &objp->vector1))
+		 return FALSE;
+	 if (!xdr_VECTOR3D (xdrs, &objp->vector2))
+		 return FALSE;
+	return TRUE;
+}
+
+bool_t
 xdr_operandos (XDR *xdrs, operandos *objp)
 {
 	register int32_t *buf;

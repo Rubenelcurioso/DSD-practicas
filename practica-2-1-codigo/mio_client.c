@@ -4,6 +4,7 @@
  * as a guideline for developing your own functions.
  */
 
+
 #include "mio.h"
 
 void calculadora_basica_1(char *host, operandos componentes, int operacion)
@@ -72,6 +73,36 @@ void calculadora_basica_1(char *host, operandos componentes, int operacion)
 #endif /* DEBUG */
 }
 
+void
+calculadora_vectorial_1(char *host)
+{
+	CLIENT *clnt;
+	float  *result_1;
+	vectores3d producto_escalar_1_arg1;
+	VECTOR3D  *result_2;
+	vectores3d producto_escalar_1_arg1;
+
+#ifndef	DEBUG
+	clnt = clnt_create (host, CALCULADORA_VECTORIAL, AVANZADA_1, "udp");
+	if (clnt == NULL) {
+		clnt_pcreateerror (host);
+		exit (1);
+	}
+#endif	/* DEBUG */
+
+	result_1 = producto_escalar_1(producto_escalar_1_arg1, clnt);
+	if (result_1 == (float *) NULL) {
+		clnt_perror (clnt, "call failed");
+	}
+	result_2 = producto_escalar_1(producto_escalar_1_arg1, clnt);
+	if (result_2 == (VECTOR3D *) NULL) {
+		clnt_perror (clnt, "call failed");
+	}
+#ifndef	DEBUG
+	clnt_destroy (clnt);
+#endif	 /* DEBUG */
+}
+
 void menu_basic(int *op, operandos *comp)
 { // Menú interactivo
 	printf("\n========Calculadora========\n");
@@ -101,5 +132,7 @@ int main(int argc, char *argv[])
 
 	host = argv[1];
 	calculadora_basica_1(host, componentes, operacion);
+	calculadora_vectorial_1(host);
 	exit(0);
 }
+

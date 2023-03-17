@@ -68,3 +68,33 @@ divide_1(operandos arg1,  CLIENT *clnt)
 	}
 	return (&clnt_res);
 }
+
+float *
+producto_escalar_1(vectores3d arg1,  CLIENT *clnt)
+{
+	static float clnt_res;
+
+	memset((char *)&clnt_res, 0, sizeof(clnt_res));
+	if (clnt_call (clnt, PRODUCTO_ESCALAR,
+		(xdrproc_t) xdr_vectores3d, (caddr_t) &arg1,
+		(xdrproc_t) xdr_float, (caddr_t) &clnt_res,
+		TIMEOUT) != RPC_SUCCESS) {
+		return (NULL);
+	}
+	return (&clnt_res);
+}
+
+VECTOR3D *
+producto_escalar_1(vectores3d arg1,  CLIENT *clnt)
+{
+	static VECTOR3D clnt_res;
+
+	memset((char *)&clnt_res, 0, sizeof(clnt_res));
+	if (clnt_call (clnt, PRODUCTO_ESCALAR,
+		(xdrproc_t) xdr_vectores3d, (caddr_t) &arg1,
+		(xdrproc_t) xdr_VECTOR3D, (caddr_t) &clnt_res,
+		TIMEOUT) != RPC_SUCCESS) {
+		return (NULL);
+	}
+	return (&clnt_res);
+}
