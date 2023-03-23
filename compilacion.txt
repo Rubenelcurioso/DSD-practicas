@@ -1,9 +1,0 @@
-Compilación de DSD práctica 2:
-rpcgen -NCa <archivo>.x (XDR)
-cp ../dir_client.c
-cp ../dir_server.c
-Finalmente compilar -> make
-
-Llamadas:
-./dir_server
-./dir_client localhost ../  

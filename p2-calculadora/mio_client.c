@@ -22,7 +22,7 @@ void calculadora_basica_1(char *host, operandos componentes, int operacion)
 #endif /* DEBUG */
 
 		
-	while(operacion!=0){
+	while(operacion!=0 || operacion!=5){
 		switch (operacion)
 		{
 		case 1:
@@ -75,14 +75,19 @@ void calculadora_basica_1(char *host, operandos componentes, int operacion)
 void menu_basic(int *op, operandos *comp)
 { // Menú interactivo
 	printf("\n========Calculadora========\n");
+	printf("0. Salir\n");
 	printf("1. Suma\n");
 	printf("2. Resta\n");
 	printf("3. Multiplicacion\n");
 	printf("4. Division\n");
+	printf("5. Menú avanzado\n");
 	printf("\nEscoja una operación = ");
 	scanf("%d", &(*op));
-	printf("\nIntroduzca los operandos espaciando => ");
-	scanf("%f %f", &comp->operando1, &comp->operando2);
+	if(*op >0 && *op < 5){
+		printf("\nIntroduzca los operandos espaciando => ");
+		scanf("%f %f", &comp->operando1, &comp->operando2);
+	}else
+		printf("Saliendo...\n");
 }
 
 int main(int argc, char *argv[])
