@@ -11,12 +11,37 @@ transport = TSocket.TSocket("localhost", 9090)
 transport = TTransport.TBufferedTransport(transport)
 protocol = TBinaryProtocol.TBinaryProtocol(transport)
 
+# def printMenu():
+#     print ("""===Menu===
+#                 1. Suma
+#                 2. Resta
+#                 3. Multiplicacion
+#                 4. Division 
+#                 5. Vectores""")
+
+# def introParams(opcion):
+#     if opcion>0 and opcion<5:
+#         param1,param2 = input("Introduzca 2 operandos").split()
+#         return param1,param2
+#     if opcion == 5:
+#         v1,v2 = list()
+#         for i in range(3):
+#             #param1,param2 = int(input("Introduzca siguiente coordenada de los 2 vectores"))
+#             v1.append(param1), v2.append(param2)
+#         return v1,v2
+#     else:
+#         print("Error")
+
 client = Calculadora.Client(protocol)
 
 transport.open()
 
 print("hacemos ping al server")
 client.ping()
+
+# printMenu()
+# opcion = int(input("Seleccione una opcion"))
+# introParams(opcion)
 
 resultado = client.suma(1, 1)
 print("1 + 1 = " + str(resultado))
