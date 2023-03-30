@@ -58,6 +58,24 @@ class Iface(object):
         """
         pass
 
+    def producto_escalar(self, v1, v2):
+        """
+        Parameters:
+         - v1
+         - v2
+
+        """
+        pass
+
+    def producto_vectorial(self, v1, v2):
+        """
+        Parameters:
+         - v1
+         - v2
+
+        """
+        pass
+
 
 class Client(Iface):
     def __init__(self, iprot, oprot=None):
@@ -226,6 +244,74 @@ class Client(Iface):
             return result.success
         raise TApplicationException(TApplicationException.MISSING_RESULT, "divida failed: unknown result")
 
+    def producto_escalar(self, v1, v2):
+        """
+        Parameters:
+         - v1
+         - v2
+
+        """
+        self.send_producto_escalar(v1, v2)
+        return self.recv_producto_escalar()
+
+    def send_producto_escalar(self, v1, v2):
+        self._oprot.writeMessageBegin('producto_escalar', TMessageType.CALL, self._seqid)
+        args = producto_escalar_args()
+        args.v1 = v1
+        args.v2 = v2
+        args.write(self._oprot)
+        self._oprot.writeMessageEnd()
+        self._oprot.trans.flush()
+
+    def recv_producto_escalar(self):
+        iprot = self._iprot
+        (fname, mtype, rseqid) = iprot.readMessageBegin()
+        if mtype == TMessageType.EXCEPTION:
+            x = TApplicationException()
+            x.read(iprot)
+            iprot.readMessageEnd()
+            raise x
+        result = producto_escalar_result()
+        result.read(iprot)
+        iprot.readMessageEnd()
+        if result.success is not None:
+            return result.success
+        raise TApplicationException(TApplicationException.MISSING_RESULT, "producto_escalar failed: unknown result")
+
+    def producto_vectorial(self, v1, v2):
+        """
+        Parameters:
+         - v1
+         - v2
+
+        """
+        self.send_producto_vectorial(v1, v2)
+        return self.recv_producto_vectorial()
+
+    def send_producto_vectorial(self, v1, v2):
+        self._oprot.writeMessageBegin('producto_vectorial', TMessageType.CALL, self._seqid)
+        args = producto_vectorial_args()
+        args.v1 = v1
+        args.v2 = v2
+        args.write(self._oprot)
+        self._oprot.writeMessageEnd()
+        self._oprot.trans.flush()
+
+    def recv_producto_vectorial(self):
+        iprot = self._iprot
+        (fname, mtype, rseqid) = iprot.readMessageBegin()
+        if mtype == TMessageType.EXCEPTION:
+            x = TApplicationException()
+            x.read(iprot)
+            iprot.readMessageEnd()
+            raise x
+        result = producto_vectorial_result()
+        result.read(iprot)
+        iprot.readMessageEnd()
+        if result.success is not None:
+            return result.success
+        raise TApplicationException(TApplicationException.MISSING_RESULT, "producto_vectorial failed: unknown result")
+
 
 class Processor(Iface, TProcessor):
     def __init__(self, handler):
@@ -236,6 +322,8 @@ class Processor(Iface, TProcessor):
         self._processMap["resta"] = Processor.process_resta
         self._processMap["multiplica"] = Processor.process_multiplica
         self._processMap["divida"] = Processor.process_divida
+        self._processMap["producto_escalar"] = Processor.process_producto_escalar
+        self._processMap["producto_vectorial"] = Processor.process_producto_vectorial
         self._on_message_begin = None
 
     def on_message_begin(self, func):
@@ -369,6 +457,52 @@ class Processor(Iface, TProcessor):
             msg_type = TMessageType.EXCEPTION
             result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
         oprot.writeMessageBegin("divida", msg_type, seqid)
+        result.write(oprot)
+        oprot.writeMessageEnd()
+        oprot.trans.flush()
+
+    def process_producto_escalar(self, seqid, iprot, oprot):
+        args = producto_escalar_args()
+        args.read(iprot)
+        iprot.readMessageEnd()
+        result = producto_escalar_result()
+        try:
+            result.success = self._handler.producto_escalar(args.v1, args.v2)
+            msg_type = TMessageType.REPLY
+        except TTransport.TTransportException:
+            raise
+        except TApplicationException as ex:
+            logging.exception('TApplication exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = ex
+        except Exception:
+            logging.exception('Unexpected exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
+        oprot.writeMessageBegin("producto_escalar", msg_type, seqid)
+        result.write(oprot)
+        oprot.writeMessageEnd()
+        oprot.trans.flush()
+
+    def process_producto_vectorial(self, seqid, iprot, oprot):
+        args = producto_vectorial_args()
+        args.read(iprot)
+        iprot.readMessageEnd()
+        result = producto_vectorial_result()
+        try:
+            result.success = self._handler.producto_vectorial(args.v1, args.v2)
+            msg_type = TMessageType.REPLY
+        except TTransport.TTransportException:
+            raise
+        except TApplicationException as ex:
+            logging.exception('TApplication exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = ex
+        except Exception:
+            logging.exception('Unexpected exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
+        oprot.writeMessageBegin("producto_vectorial", msg_type, seqid)
         result.write(oprot)
         oprot.writeMessageEnd()
         oprot.trans.flush()
@@ -962,6 +1096,157 @@ class divida_result(object):
             if ftype == TType.STOP:
                 break
             if fid == 0:
+                if ftype == TType.DOUBLE:
+                    self.success = iprot.readDouble()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('divida_result')
+        if self.success is not None:
+            oprot.writeFieldBegin('success', TType.DOUBLE, 0)
+            oprot.writeDouble(self.success)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(divida_result)
+divida_result.thrift_spec = (
+    (0, TType.DOUBLE, 'success', None, None, ),  # 0
+)
+
+
+class producto_escalar_args(object):
+    """
+    Attributes:
+     - v1
+     - v2
+
+    """
+
+
+    def __init__(self, v1=None, v2=None,):
+        self.v1 = v1
+        self.v2 = v2
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.LIST:
+                    self.v1 = []
+                    (_etype3, _size0) = iprot.readListBegin()
+                    for _i4 in range(_size0):
+                        _elem5 = iprot.readI32()
+                        self.v1.append(_elem5)
+                    iprot.readListEnd()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 2:
+                if ftype == TType.LIST:
+                    self.v2 = []
+                    (_etype9, _size6) = iprot.readListBegin()
+                    for _i10 in range(_size6):
+                        _elem11 = iprot.readI32()
+                        self.v2.append(_elem11)
+                    iprot.readListEnd()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('producto_escalar_args')
+        if self.v1 is not None:
+            oprot.writeFieldBegin('v1', TType.LIST, 1)
+            oprot.writeListBegin(TType.I32, len(self.v1))
+            for iter12 in self.v1:
+                oprot.writeI32(iter12)
+            oprot.writeListEnd()
+            oprot.writeFieldEnd()
+        if self.v2 is not None:
+            oprot.writeFieldBegin('v2', TType.LIST, 2)
+            oprot.writeListBegin(TType.I32, len(self.v2))
+            for iter13 in self.v2:
+                oprot.writeI32(iter13)
+            oprot.writeListEnd()
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(producto_escalar_args)
+producto_escalar_args.thrift_spec = (
+    None,  # 0
+    (1, TType.LIST, 'v1', (TType.I32, None, False), None, ),  # 1
+    (2, TType.LIST, 'v2', (TType.I32, None, False), None, ),  # 2
+)
+
+
+class producto_escalar_result(object):
+    """
+    Attributes:
+     - success
+
+    """
+
+
+    def __init__(self, success=None,):
+        self.success = success
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 0:
                 if ftype == TType.I32:
                     self.success = iprot.readI32()
                 else:
@@ -975,7 +1260,7 @@ class divida_result(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('divida_result')
+        oprot.writeStructBegin('producto_escalar_result')
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.I32, 0)
             oprot.writeI32(self.success)
@@ -996,9 +1281,168 @@ class divida_result(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(divida_result)
-divida_result.thrift_spec = (
+all_structs.append(producto_escalar_result)
+producto_escalar_result.thrift_spec = (
     (0, TType.I32, 'success', None, None, ),  # 0
+)
+
+
+class producto_vectorial_args(object):
+    """
+    Attributes:
+     - v1
+     - v2
+
+    """
+
+
+    def __init__(self, v1=None, v2=None,):
+        self.v1 = v1
+        self.v2 = v2
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.LIST:
+                    self.v1 = []
+                    (_etype17, _size14) = iprot.readListBegin()
+                    for _i18 in range(_size14):
+                        _elem19 = iprot.readI32()
+                        self.v1.append(_elem19)
+                    iprot.readListEnd()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 2:
+                if ftype == TType.LIST:
+                    self.v2 = []
+                    (_etype23, _size20) = iprot.readListBegin()
+                    for _i24 in range(_size20):
+                        _elem25 = iprot.readI32()
+                        self.v2.append(_elem25)
+                    iprot.readListEnd()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('producto_vectorial_args')
+        if self.v1 is not None:
+            oprot.writeFieldBegin('v1', TType.LIST, 1)
+            oprot.writeListBegin(TType.I32, len(self.v1))
+            for iter26 in self.v1:
+                oprot.writeI32(iter26)
+            oprot.writeListEnd()
+            oprot.writeFieldEnd()
+        if self.v2 is not None:
+            oprot.writeFieldBegin('v2', TType.LIST, 2)
+            oprot.writeListBegin(TType.I32, len(self.v2))
+            for iter27 in self.v2:
+                oprot.writeI32(iter27)
+            oprot.writeListEnd()
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(producto_vectorial_args)
+producto_vectorial_args.thrift_spec = (
+    None,  # 0
+    (1, TType.LIST, 'v1', (TType.I32, None, False), None, ),  # 1
+    (2, TType.LIST, 'v2', (TType.I32, None, False), None, ),  # 2
+)
+
+
+class producto_vectorial_result(object):
+    """
+    Attributes:
+     - success
+
+    """
+
+
+    def __init__(self, success=None,):
+        self.success = success
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 0:
+                if ftype == TType.LIST:
+                    self.success = []
+                    (_etype31, _size28) = iprot.readListBegin()
+                    for _i32 in range(_size28):
+                        _elem33 = iprot.readI32()
+                        self.success.append(_elem33)
+                    iprot.readListEnd()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('producto_vectorial_result')
+        if self.success is not None:
+            oprot.writeFieldBegin('success', TType.LIST, 0)
+            oprot.writeListBegin(TType.I32, len(self.success))
+            for iter34 in self.success:
+                oprot.writeI32(iter34)
+            oprot.writeListEnd()
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(producto_vectorial_result)
+producto_vectorial_result.thrift_spec = (
+    (0, TType.LIST, 'success', (TType.I32, None, False), None, ),  # 0
 )
 fix_spec(all_structs)
 del all_structs

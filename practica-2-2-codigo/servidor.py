@@ -1,5 +1,6 @@
 import glob
 import sys
+sys.path.append("/home/rubnrosales/Universidad/3Año/DSD/DSD-practicas/practica-2-2-codigo/gen-py")
 
 from calculadora import Calculadora
 
@@ -34,7 +35,21 @@ class CalculadoraHandler:
     
     def divida(self, n1, n2):
         print("dividiendo " + str(n1) + " con " + str(n2))
-        return n1 / n2
+        return n1 / n2 #Divisón entera
+    
+    def producto_escalar(self, v1, v2):
+        resultado = 0
+        for i in range(0,len(v1)):
+            resultado += v1[i] * v2[i]
+        return resultado
+    
+    def producto_vectorial(self, v1, v2):
+        resultado = list()
+        resultado.append(v1[1]*v2[2]-v1[2]*v2[1])
+        resultado.append(v1[2]*v2[0]-v1[0]*v2[2])
+        resultado.append(v1[0]*v2[1]-v1[1]*v2[0])
+        return resultado
+
     
 
 
