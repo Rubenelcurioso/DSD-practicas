@@ -22,6 +22,9 @@ class Iface(object):
     def ping(self):
         pass
 
+    def pingOtroServer(self):
+        pass
+
     def suma(self, num1, num2):
         """
         Parameters:
@@ -104,6 +107,30 @@ class Client(Iface):
             iprot.readMessageEnd()
             raise x
         result = ping_result()
+        result.read(iprot)
+        iprot.readMessageEnd()
+        return
+
+    def pingOtroServer(self):
+        self.send_pingOtroServer()
+        self.recv_pingOtroServer()
+
+    def send_pingOtroServer(self):
+        self._oprot.writeMessageBegin('pingOtroServer', TMessageType.CALL, self._seqid)
+        args = pingOtroServer_args()
+        args.write(self._oprot)
+        self._oprot.writeMessageEnd()
+        self._oprot.trans.flush()
+
+    def recv_pingOtroServer(self):
+        iprot = self._iprot
+        (fname, mtype, rseqid) = iprot.readMessageBegin()
+        if mtype == TMessageType.EXCEPTION:
+            x = TApplicationException()
+            x.read(iprot)
+            iprot.readMessageEnd()
+            raise x
+        result = pingOtroServer_result()
         result.read(iprot)
         iprot.readMessageEnd()
         return
@@ -318,6 +345,7 @@ class Processor(Iface, TProcessor):
         self._handler = handler
         self._processMap = {}
         self._processMap["ping"] = Processor.process_ping
+        self._processMap["pingOtroServer"] = Processor.process_pingOtroServer
         self._processMap["suma"] = Processor.process_suma
         self._processMap["resta"] = Processor.process_resta
         self._processMap["multiplica"] = Processor.process_multiplica
@@ -365,6 +393,29 @@ class Processor(Iface, TProcessor):
             msg_type = TMessageType.EXCEPTION
             result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
         oprot.writeMessageBegin("ping", msg_type, seqid)
+        result.write(oprot)
+        oprot.writeMessageEnd()
+        oprot.trans.flush()
+
+    def process_pingOtroServer(self, seqid, iprot, oprot):
+        args = pingOtroServer_args()
+        args.read(iprot)
+        iprot.readMessageEnd()
+        result = pingOtroServer_result()
+        try:
+            self._handler.pingOtroServer()
+            msg_type = TMessageType.REPLY
+        except TTransport.TTransportException:
+            raise
+        except TApplicationException as ex:
+            logging.exception('TApplication exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = ex
+        except Exception:
+            logging.exception('Unexpected exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
+        oprot.writeMessageBegin("pingOtroServer", msg_type, seqid)
         result.write(oprot)
         oprot.writeMessageEnd()
         oprot.trans.flush()
@@ -593,6 +644,92 @@ class ping_result(object):
         return not (self == other)
 all_structs.append(ping_result)
 ping_result.thrift_spec = (
+)
+
+
+class pingOtroServer_args(object):
+
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('pingOtroServer_args')
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(pingOtroServer_args)
+pingOtroServer_args.thrift_spec = (
+)
+
+
+class pingOtroServer_result(object):
+
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('pingOtroServer_result')
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(pingOtroServer_result)
+pingOtroServer_result.thrift_spec = (
 )
 
 
