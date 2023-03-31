@@ -80,6 +80,14 @@ class CalculadoraHandler:
         self.transporte.close()
         return resultado
 
+    def suma_matriz(self,m1,m2):
+        self.transporte.open()
+        print("Conectando con un servidor más avanzado...")
+        resultado = self.server_client.suma_matriz(m1,m2)
+        print("Obtenida respuesta!")
+        self.transporte.close()
+        return resultado
+
 if __name__ == "__main__":
     handler = CalculadoraHandler()
     processor = Calculadora.Processor(handler)

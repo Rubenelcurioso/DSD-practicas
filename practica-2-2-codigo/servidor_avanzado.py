@@ -46,6 +46,14 @@ class CalculadoraAvanzadaHandler:
         resultado.append(v1[2]*v2[0]-v1[0]*v2[2])
         resultado.append(v1[0]*v2[1]-v1[1]*v2[0])
         return resultado
+    
+    def suma_matriz(self,m1, m2):
+        resultado = [[0 for j in range(len(m1[i]))] for i in range(len(m1))] # inicializar resultado como una matriz de ceros
+        for i in range(len(m1)):
+            for j in range(len(m1[i])):
+                resultado[i][j] = m1[i][j] + m2[i][j] 
+        return resultado
+
 
 if __name__ == "__main__":
     handler = CalculadoraAvanzadaHandler()

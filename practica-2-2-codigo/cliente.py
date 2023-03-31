@@ -61,6 +61,9 @@ resultado = client.suma_vectorial(v1,v2)
 print("suma vectorial: "+str(resultado))
 resultado = client.resta_vectorial(v1,v2)
 print("resta vectorial: "+str(resultado))
-
+m1 = [[1.0,1.0,1.0],[2.0,2.0,2.0],[3.0,3.0,3.0]]
+m2 = [[4.0,4.0,4.0],[5.0,5.0,5.0],[6.0,6.0,6.0]]
+resultado = client.suma_matriz(m1,m2)
+print("matriz: "+str(resultado))
 
 transport.close()
