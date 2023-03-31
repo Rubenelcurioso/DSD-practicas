@@ -19,6 +19,24 @@ all_structs = []
 
 
 class Iface(object):
+    def suma_vectorial(self, v1, v2):
+        """
+        Parameters:
+         - v1
+         - v2
+
+        """
+        pass
+
+    def resta_vectorial(self, v1, v2):
+        """
+        Parameters:
+         - v1
+         - v2
+
+        """
+        pass
+
     def producto_escalar(self, v1, v2):
         """
         Parameters:
@@ -44,6 +62,74 @@ class Client(Iface):
         if oprot is not None:
             self._oprot = oprot
         self._seqid = 0
+
+    def suma_vectorial(self, v1, v2):
+        """
+        Parameters:
+         - v1
+         - v2
+
+        """
+        self.send_suma_vectorial(v1, v2)
+        return self.recv_suma_vectorial()
+
+    def send_suma_vectorial(self, v1, v2):
+        self._oprot.writeMessageBegin('suma_vectorial', TMessageType.CALL, self._seqid)
+        args = suma_vectorial_args()
+        args.v1 = v1
+        args.v2 = v2
+        args.write(self._oprot)
+        self._oprot.writeMessageEnd()
+        self._oprot.trans.flush()
+
+    def recv_suma_vectorial(self):
+        iprot = self._iprot
+        (fname, mtype, rseqid) = iprot.readMessageBegin()
+        if mtype == TMessageType.EXCEPTION:
+            x = TApplicationException()
+            x.read(iprot)
+            iprot.readMessageEnd()
+            raise x
+        result = suma_vectorial_result()
+        result.read(iprot)
+        iprot.readMessageEnd()
+        if result.success is not None:
+            return result.success
+        raise TApplicationException(TApplicationException.MISSING_RESULT, "suma_vectorial failed: unknown result")
+
+    def resta_vectorial(self, v1, v2):
+        """
+        Parameters:
+         - v1
+         - v2
+
+        """
+        self.send_resta_vectorial(v1, v2)
+        return self.recv_resta_vectorial()
+
+    def send_resta_vectorial(self, v1, v2):
+        self._oprot.writeMessageBegin('resta_vectorial', TMessageType.CALL, self._seqid)
+        args = resta_vectorial_args()
+        args.v1 = v1
+        args.v2 = v2
+        args.write(self._oprot)
+        self._oprot.writeMessageEnd()
+        self._oprot.trans.flush()
+
+    def recv_resta_vectorial(self):
+        iprot = self._iprot
+        (fname, mtype, rseqid) = iprot.readMessageBegin()
+        if mtype == TMessageType.EXCEPTION:
+            x = TApplicationException()
+            x.read(iprot)
+            iprot.readMessageEnd()
+            raise x
+        result = resta_vectorial_result()
+        result.read(iprot)
+        iprot.readMessageEnd()
+        if result.success is not None:
+            return result.success
+        raise TApplicationException(TApplicationException.MISSING_RESULT, "resta_vectorial failed: unknown result")
 
     def producto_escalar(self, v1, v2):
         """
@@ -118,6 +204,8 @@ class Processor(Iface, TProcessor):
     def __init__(self, handler):
         self._handler = handler
         self._processMap = {}
+        self._processMap["suma_vectorial"] = Processor.process_suma_vectorial
+        self._processMap["resta_vectorial"] = Processor.process_resta_vectorial
         self._processMap["producto_escalar"] = Processor.process_producto_escalar
         self._processMap["producto_vectorial"] = Processor.process_producto_vectorial
         self._on_message_begin = None
@@ -141,6 +229,52 @@ class Processor(Iface, TProcessor):
         else:
             self._processMap[name](self, seqid, iprot, oprot)
         return True
+
+    def process_suma_vectorial(self, seqid, iprot, oprot):
+        args = suma_vectorial_args()
+        args.read(iprot)
+        iprot.readMessageEnd()
+        result = suma_vectorial_result()
+        try:
+            result.success = self._handler.suma_vectorial(args.v1, args.v2)
+            msg_type = TMessageType.REPLY
+        except TTransport.TTransportException:
+            raise
+        except TApplicationException as ex:
+            logging.exception('TApplication exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = ex
+        except Exception:
+            logging.exception('Unexpected exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
+        oprot.writeMessageBegin("suma_vectorial", msg_type, seqid)
+        result.write(oprot)
+        oprot.writeMessageEnd()
+        oprot.trans.flush()
+
+    def process_resta_vectorial(self, seqid, iprot, oprot):
+        args = resta_vectorial_args()
+        args.read(iprot)
+        iprot.readMessageEnd()
+        result = resta_vectorial_result()
+        try:
+            result.success = self._handler.resta_vectorial(args.v1, args.v2)
+            msg_type = TMessageType.REPLY
+        except TTransport.TTransportException:
+            raise
+        except TApplicationException as ex:
+            logging.exception('TApplication exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = ex
+        except Exception:
+            logging.exception('Unexpected exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
+        oprot.writeMessageBegin("resta_vectorial", msg_type, seqid)
+        result.write(oprot)
+        oprot.writeMessageEnd()
+        oprot.trans.flush()
 
     def process_producto_escalar(self, seqid, iprot, oprot):
         args = producto_escalar_args()
@@ -191,6 +325,324 @@ class Processor(Iface, TProcessor):
 # HELPER FUNCTIONS AND STRUCTURES
 
 
+class suma_vectorial_args(object):
+    """
+    Attributes:
+     - v1
+     - v2
+
+    """
+
+
+    def __init__(self, v1=None, v2=None,):
+        self.v1 = v1
+        self.v2 = v2
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.LIST:
+                    self.v1 = []
+                    (_etype80, _size77) = iprot.readListBegin()
+                    for _i81 in range(_size77):
+                        _elem82 = iprot.readDouble()
+                        self.v1.append(_elem82)
+                    iprot.readListEnd()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 2:
+                if ftype == TType.LIST:
+                    self.v2 = []
+                    (_etype86, _size83) = iprot.readListBegin()
+                    for _i87 in range(_size83):
+                        _elem88 = iprot.readDouble()
+                        self.v2.append(_elem88)
+                    iprot.readListEnd()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('suma_vectorial_args')
+        if self.v1 is not None:
+            oprot.writeFieldBegin('v1', TType.LIST, 1)
+            oprot.writeListBegin(TType.DOUBLE, len(self.v1))
+            for iter89 in self.v1:
+                oprot.writeDouble(iter89)
+            oprot.writeListEnd()
+            oprot.writeFieldEnd()
+        if self.v2 is not None:
+            oprot.writeFieldBegin('v2', TType.LIST, 2)
+            oprot.writeListBegin(TType.DOUBLE, len(self.v2))
+            for iter90 in self.v2:
+                oprot.writeDouble(iter90)
+            oprot.writeListEnd()
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(suma_vectorial_args)
+suma_vectorial_args.thrift_spec = (
+    None,  # 0
+    (1, TType.LIST, 'v1', (TType.DOUBLE, None, False), None, ),  # 1
+    (2, TType.LIST, 'v2', (TType.DOUBLE, None, False), None, ),  # 2
+)
+
+
+class suma_vectorial_result(object):
+    """
+    Attributes:
+     - success
+
+    """
+
+
+    def __init__(self, success=None,):
+        self.success = success
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 0:
+                if ftype == TType.LIST:
+                    self.success = []
+                    (_etype94, _size91) = iprot.readListBegin()
+                    for _i95 in range(_size91):
+                        _elem96 = iprot.readDouble()
+                        self.success.append(_elem96)
+                    iprot.readListEnd()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('suma_vectorial_result')
+        if self.success is not None:
+            oprot.writeFieldBegin('success', TType.LIST, 0)
+            oprot.writeListBegin(TType.DOUBLE, len(self.success))
+            for iter97 in self.success:
+                oprot.writeDouble(iter97)
+            oprot.writeListEnd()
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(suma_vectorial_result)
+suma_vectorial_result.thrift_spec = (
+    (0, TType.LIST, 'success', (TType.DOUBLE, None, False), None, ),  # 0
+)
+
+
+class resta_vectorial_args(object):
+    """
+    Attributes:
+     - v1
+     - v2
+
+    """
+
+
+    def __init__(self, v1=None, v2=None,):
+        self.v1 = v1
+        self.v2 = v2
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.LIST:
+                    self.v1 = []
+                    (_etype101, _size98) = iprot.readListBegin()
+                    for _i102 in range(_size98):
+                        _elem103 = iprot.readDouble()
+                        self.v1.append(_elem103)
+                    iprot.readListEnd()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 2:
+                if ftype == TType.LIST:
+                    self.v2 = []
+                    (_etype107, _size104) = iprot.readListBegin()
+                    for _i108 in range(_size104):
+                        _elem109 = iprot.readDouble()
+                        self.v2.append(_elem109)
+                    iprot.readListEnd()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('resta_vectorial_args')
+        if self.v1 is not None:
+            oprot.writeFieldBegin('v1', TType.LIST, 1)
+            oprot.writeListBegin(TType.DOUBLE, len(self.v1))
+            for iter110 in self.v1:
+                oprot.writeDouble(iter110)
+            oprot.writeListEnd()
+            oprot.writeFieldEnd()
+        if self.v2 is not None:
+            oprot.writeFieldBegin('v2', TType.LIST, 2)
+            oprot.writeListBegin(TType.DOUBLE, len(self.v2))
+            for iter111 in self.v2:
+                oprot.writeDouble(iter111)
+            oprot.writeListEnd()
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(resta_vectorial_args)
+resta_vectorial_args.thrift_spec = (
+    None,  # 0
+    (1, TType.LIST, 'v1', (TType.DOUBLE, None, False), None, ),  # 1
+    (2, TType.LIST, 'v2', (TType.DOUBLE, None, False), None, ),  # 2
+)
+
+
+class resta_vectorial_result(object):
+    """
+    Attributes:
+     - success
+
+    """
+
+
+    def __init__(self, success=None,):
+        self.success = success
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 0:
+                if ftype == TType.LIST:
+                    self.success = []
+                    (_etype115, _size112) = iprot.readListBegin()
+                    for _i116 in range(_size112):
+                        _elem117 = iprot.readDouble()
+                        self.success.append(_elem117)
+                    iprot.readListEnd()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('resta_vectorial_result')
+        if self.success is not None:
+            oprot.writeFieldBegin('success', TType.LIST, 0)
+            oprot.writeListBegin(TType.DOUBLE, len(self.success))
+            for iter118 in self.success:
+                oprot.writeDouble(iter118)
+            oprot.writeListEnd()
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(resta_vectorial_result)
+resta_vectorial_result.thrift_spec = (
+    (0, TType.LIST, 'success', (TType.DOUBLE, None, False), None, ),  # 0
+)
+
+
 class producto_escalar_args(object):
     """
     Attributes:
@@ -216,20 +668,20 @@ class producto_escalar_args(object):
             if fid == 1:
                 if ftype == TType.LIST:
                     self.v1 = []
-                    (_etype38, _size35) = iprot.readListBegin()
-                    for _i39 in range(_size35):
-                        _elem40 = iprot.readDouble()
-                        self.v1.append(_elem40)
+                    (_etype122, _size119) = iprot.readListBegin()
+                    for _i123 in range(_size119):
+                        _elem124 = iprot.readDouble()
+                        self.v1.append(_elem124)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
                 if ftype == TType.LIST:
                     self.v2 = []
-                    (_etype44, _size41) = iprot.readListBegin()
-                    for _i45 in range(_size41):
-                        _elem46 = iprot.readDouble()
-                        self.v2.append(_elem46)
+                    (_etype128, _size125) = iprot.readListBegin()
+                    for _i129 in range(_size125):
+                        _elem130 = iprot.readDouble()
+                        self.v2.append(_elem130)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -246,15 +698,15 @@ class producto_escalar_args(object):
         if self.v1 is not None:
             oprot.writeFieldBegin('v1', TType.LIST, 1)
             oprot.writeListBegin(TType.DOUBLE, len(self.v1))
-            for iter47 in self.v1:
-                oprot.writeDouble(iter47)
+            for iter131 in self.v1:
+                oprot.writeDouble(iter131)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         if self.v2 is not None:
             oprot.writeFieldBegin('v2', TType.LIST, 2)
             oprot.writeListBegin(TType.DOUBLE, len(self.v2))
-            for iter48 in self.v2:
-                oprot.writeDouble(iter48)
+            for iter132 in self.v2:
+                oprot.writeDouble(iter132)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -367,20 +819,20 @@ class producto_vectorial_args(object):
             if fid == 1:
                 if ftype == TType.LIST:
                     self.v1 = []
-                    (_etype52, _size49) = iprot.readListBegin()
-                    for _i53 in range(_size49):
-                        _elem54 = iprot.readDouble()
-                        self.v1.append(_elem54)
+                    (_etype136, _size133) = iprot.readListBegin()
+                    for _i137 in range(_size133):
+                        _elem138 = iprot.readDouble()
+                        self.v1.append(_elem138)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
                 if ftype == TType.LIST:
                     self.v2 = []
-                    (_etype58, _size55) = iprot.readListBegin()
-                    for _i59 in range(_size55):
-                        _elem60 = iprot.readDouble()
-                        self.v2.append(_elem60)
+                    (_etype142, _size139) = iprot.readListBegin()
+                    for _i143 in range(_size139):
+                        _elem144 = iprot.readDouble()
+                        self.v2.append(_elem144)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -397,15 +849,15 @@ class producto_vectorial_args(object):
         if self.v1 is not None:
             oprot.writeFieldBegin('v1', TType.LIST, 1)
             oprot.writeListBegin(TType.DOUBLE, len(self.v1))
-            for iter61 in self.v1:
-                oprot.writeDouble(iter61)
+            for iter145 in self.v1:
+                oprot.writeDouble(iter145)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         if self.v2 is not None:
             oprot.writeFieldBegin('v2', TType.LIST, 2)
             oprot.writeListBegin(TType.DOUBLE, len(self.v2))
-            for iter62 in self.v2:
-                oprot.writeDouble(iter62)
+            for iter146 in self.v2:
+                oprot.writeDouble(iter146)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -455,10 +907,10 @@ class producto_vectorial_result(object):
             if fid == 0:
                 if ftype == TType.LIST:
                     self.success = []
-                    (_etype66, _size63) = iprot.readListBegin()
-                    for _i67 in range(_size63):
-                        _elem68 = iprot.readDouble()
-                        self.success.append(_elem68)
+                    (_etype150, _size147) = iprot.readListBegin()
+                    for _i151 in range(_size147):
+                        _elem152 = iprot.readDouble()
+                        self.success.append(_elem152)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -475,8 +927,8 @@ class producto_vectorial_result(object):
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.LIST, 0)
             oprot.writeListBegin(TType.DOUBLE, len(self.success))
-            for iter69 in self.success:
-                oprot.writeDouble(iter69)
+            for iter153 in self.success:
+                oprot.writeDouble(iter153)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()

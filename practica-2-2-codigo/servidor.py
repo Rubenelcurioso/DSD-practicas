@@ -48,15 +48,35 @@ class CalculadoraHandler:
         print("dividiendo " + str(n1) + " con " + str(n2))
         return n1 / n2 #Divisón entera
     
+    def suma_vectorial(self,v1,v2):
+        self.transporte.open()
+        print("Conectando con un servidor más avanzado...")
+        resultado = self.server_client.suma_vectorial(v1,v2)
+        print("Obtenida respuesta!")
+        self.transporte.close()
+        return resultado
+    
+    def resta_vectorial(self,v1,v2):
+        self.transporte.open()
+        print("Conectando con un servidor más avanzado...")
+        resultado = self.server_client.resta_vectorial(v1,v2)
+        print("Obtenida respuesta!")
+        self.transporte.close()
+        return resultado
+
     def producto_escalar(self,v1, v2):
         self.transporte.open()
+        print("Conectando con un servidor más avanzado...")
         resultado = self.server_client.producto_escalar(v1,v2)
+        print("Obtenida respuesta!")
         self.transporte.close()
         return resultado
 
     def producto_vectorial(self,v1, v2):
         self.transporte.open()
+        print("Conectando con un servidor más avanzado...")
         resultado = self.server_client.producto_vectorial(v1,v2)
+        print("Obtenida respuesta!")
         self.transporte.close()
         return resultado
 

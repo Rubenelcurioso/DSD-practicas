@@ -18,23 +18,34 @@ class CalculadoraAvanzadaHandler:
     def __init__(self):
         self.log = {}
 
+    def suma_vectorial(self,v1,v2):
+        print("Calculando suma")
+        resultado = list()
+        for i in range(0,len(v1)):
+            resultado.append(v1[i]+v2[i])
+        return resultado
+    
+    def resta_vectorial(self,v1,v2):
+        print("Calculando resta")
+        resultado = list()
+        for i in range(0,len(v1)):
+            resultado.append(v1[i]-v2[i])
+        return resultado
+
     def producto_escalar(self,v1, v2):
+        print("Calculando producto escalar")
         resultado = 0.0
         for i in range(0,len(v1)):
             resultado += v1[i] * v2[i]
         return resultado
     
     def producto_vectorial(self,v1, v2):
+        print("Calculando producto vectorial")
         resultado = list()
         resultado.append(v1[1]*v2[2]-v1[2]*v2[1])
         resultado.append(v1[2]*v2[0]-v1[0]*v2[2])
         resultado.append(v1[0]*v2[1]-v1[1]*v2[0])
         return resultado
-
-
-
-    
-
 
 if __name__ == "__main__":
     handler = CalculadoraAvanzadaHandler()

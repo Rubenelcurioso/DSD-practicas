@@ -57,6 +57,10 @@ resultado = client.producto_escalar(v1,v2)
 print("producto escalar: "+str(resultado))
 resultado = client.producto_vectorial([1.0,2,3],[2,2,2])
 print("producto vectorial: " + str(resultado))
+resultado = client.suma_vectorial(v1,v2)
+print("suma vectorial: "+str(resultado))
+resultado = client.resta_vectorial(v1,v2)
+print("resta vectorial: "+str(resultado))
 
 
 transport.close()
