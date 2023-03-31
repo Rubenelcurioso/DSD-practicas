@@ -3,7 +3,9 @@ import sys
 sys.path.append("/home/rubnrosales/Universidad/3Año/DSD/DSD-practicas/practica-2-2-codigo/gen-py")
 
 from calculadora import Calculadora
+from calculadora import Calculadora_avanzada
 
+from thrift import Thrift
 from thrift.transport import TSocket
 from thrift.transport import TTransport
 from thrift.protocol import TBinaryProtocol
@@ -17,6 +19,15 @@ logging.basicConfig(level=logging.DEBUG)
 class CalculadoraHandler:
     def __init__(self):
         self.log = {}
+        # Tengo que usar la dirección IP directa (IPv4) debido a que cómo
+        # el otro cliente está utilizando la dirección de localhost (IPv6) y
+        # solo se puede traducir una vez, en caso contrario daría errores de 
+        # conexiones rechazadas porque el puerto queda temporalmente bloqueado
+        # ya que considera actividad sospechosa
+        self.transporte = TSocket.TSocket("127.0.0.1",9091)
+        self.transporte = TTransport.TBufferedTransport(self.transporte)
+        self.protocolo = TBinaryProtocol.TBinaryProtocol(self.transporte)
+        self.server_client = Calculadora_avanzada.Client(self.protocolo)
 
     def ping(self):
         print("me han hecho ping()")
@@ -37,21 +48,17 @@ class CalculadoraHandler:
         print("dividiendo " + str(n1) + " con " + str(n2))
         return n1 / n2 #Divisón entera
     
-    def producto_escalar(self, v1, v2):
-        resultado = 0
-        for i in range(0,len(v1)):
-            resultado += v1[i] * v2[i]
-        return resultado
-    
-    def producto_vectorial(self, v1, v2):
-        resultado = list()
-        resultado.append(v1[1]*v2[2]-v1[2]*v2[1])
-        resultado.append(v1[2]*v2[0]-v1[0]*v2[2])
-        resultado.append(v1[0]*v2[1]-v1[1]*v2[0])
+    def producto_escalar(self,v1, v2):
+        self.transporte.open()
+        resultado = self.server_client.producto_escalar(v1,v2)
+        self.transporte.close()
         return resultado
 
-    
-
+    def producto_vectorial(self,v1, v2):
+        self.transporte.open()
+        resultado = self.server_client.producto_vectorial(v1,v2)
+        self.transporte.close()
+        return resultado
 
 if __name__ == "__main__":
     handler = CalculadoraHandler()
