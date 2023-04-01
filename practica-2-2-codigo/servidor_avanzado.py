@@ -48,11 +48,54 @@ class CalculadoraAvanzadaHandler:
         return resultado
     
     def suma_matriz(self,m1, m2):
+        print("Calculando suma de matrices")
+        if len(m1) != len(m2) or len(m1[0]) != len(m2[0]):
+            raise ValueError("Las matrices deben tener las mismas dimensiones")
+        
         resultado = [[0 for j in range(len(m1[i]))] for i in range(len(m1))] # inicializar resultado como una matriz de ceros
         for i in range(len(m1)):
             for j in range(len(m1[i])):
                 resultado[i][j] = m1[i][j] + m2[i][j] 
         return resultado
+    
+    def resta_matriz(self,m1, m2):  
+        print("Calculando resta de matrices")
+        if len(m1) != len(m2) or len(m1[0]) != len(m2[0]):
+            raise ValueError("Las matrices deben tener las mismas dimensiones")
+        
+        resultado = [[0 for j in range(len(m1[i]))] for i in range(len(m1))]
+        for i in range(len(m1)):
+            for j in range(len(m1[i])):
+                resultado[i][j] = m1[i][j] - m2[i][j] 
+        return resultado
+    
+    def multiplica_matriz(self,m1, m2):
+        print("Calculando multiplicacion de matrices")
+        if len(m1[0]) != len(m2): #Columnas de m1 == Filas de m2
+            raise ValueError("El número de columnas de la matriz 1 debe ser igual al número de filas de la matriz 2")
+        
+        resultado = [[0 for j in range(len(m2[0]))] for i in range(len(m1))]
+        
+        for i in range(len(m1)):
+            for j in range(len(m2[0])):
+                for k in range(len(m2)):
+                    resultado[i][j] += m1[i][k] * m2[k][j]
+        return resultado
+    
+    def divide_matriz(self,m1, m2):
+        print("Calculando division de matrices")
+        if len(m1) != len(m2) or len(m1[0]) != len(m2[0]):
+            raise ValueError("Las matrices deben tener las mismas dimensiones")
+        
+        resultado = [[0 for j in range(len(m1[i]))] for i in range(len(m1))]
+        
+        for i in range(len(m1)):
+            for j in range(len(m1[i])):
+                if m2[i][j] == 0:
+                    raise ValueError("No se puede dividir entre cero")
+                resultado[i][j] = m1[i][j] / m2[i][j]  # dividir los elementos correspondientes y asignarlos a la posición correspondiente en la matriz "resultado"
+        return resultado
+
 
 
 if __name__ == "__main__":

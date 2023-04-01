@@ -64,6 +64,33 @@ class Iface(object):
         """
         pass
 
+    def resta_matriz(self, m1, m2):
+        """
+        Parameters:
+         - m1
+         - m2
+
+        """
+        pass
+
+    def multiplica_matriz(self, m1, m2):
+        """
+        Parameters:
+         - m1
+         - m2
+
+        """
+        pass
+
+    def divide_matriz(self, m1, m2):
+        """
+        Parameters:
+         - m1
+         - m2
+
+        """
+        pass
+
 
 class Client(Iface):
     def __init__(self, iprot, oprot=None):
@@ -242,6 +269,108 @@ class Client(Iface):
             return result.success
         raise TApplicationException(TApplicationException.MISSING_RESULT, "suma_matriz failed: unknown result")
 
+    def resta_matriz(self, m1, m2):
+        """
+        Parameters:
+         - m1
+         - m2
+
+        """
+        self.send_resta_matriz(m1, m2)
+        return self.recv_resta_matriz()
+
+    def send_resta_matriz(self, m1, m2):
+        self._oprot.writeMessageBegin('resta_matriz', TMessageType.CALL, self._seqid)
+        args = resta_matriz_args()
+        args.m1 = m1
+        args.m2 = m2
+        args.write(self._oprot)
+        self._oprot.writeMessageEnd()
+        self._oprot.trans.flush()
+
+    def recv_resta_matriz(self):
+        iprot = self._iprot
+        (fname, mtype, rseqid) = iprot.readMessageBegin()
+        if mtype == TMessageType.EXCEPTION:
+            x = TApplicationException()
+            x.read(iprot)
+            iprot.readMessageEnd()
+            raise x
+        result = resta_matriz_result()
+        result.read(iprot)
+        iprot.readMessageEnd()
+        if result.success is not None:
+            return result.success
+        raise TApplicationException(TApplicationException.MISSING_RESULT, "resta_matriz failed: unknown result")
+
+    def multiplica_matriz(self, m1, m2):
+        """
+        Parameters:
+         - m1
+         - m2
+
+        """
+        self.send_multiplica_matriz(m1, m2)
+        return self.recv_multiplica_matriz()
+
+    def send_multiplica_matriz(self, m1, m2):
+        self._oprot.writeMessageBegin('multiplica_matriz', TMessageType.CALL, self._seqid)
+        args = multiplica_matriz_args()
+        args.m1 = m1
+        args.m2 = m2
+        args.write(self._oprot)
+        self._oprot.writeMessageEnd()
+        self._oprot.trans.flush()
+
+    def recv_multiplica_matriz(self):
+        iprot = self._iprot
+        (fname, mtype, rseqid) = iprot.readMessageBegin()
+        if mtype == TMessageType.EXCEPTION:
+            x = TApplicationException()
+            x.read(iprot)
+            iprot.readMessageEnd()
+            raise x
+        result = multiplica_matriz_result()
+        result.read(iprot)
+        iprot.readMessageEnd()
+        if result.success is not None:
+            return result.success
+        raise TApplicationException(TApplicationException.MISSING_RESULT, "multiplica_matriz failed: unknown result")
+
+    def divide_matriz(self, m1, m2):
+        """
+        Parameters:
+         - m1
+         - m2
+
+        """
+        self.send_divide_matriz(m1, m2)
+        return self.recv_divide_matriz()
+
+    def send_divide_matriz(self, m1, m2):
+        self._oprot.writeMessageBegin('divide_matriz', TMessageType.CALL, self._seqid)
+        args = divide_matriz_args()
+        args.m1 = m1
+        args.m2 = m2
+        args.write(self._oprot)
+        self._oprot.writeMessageEnd()
+        self._oprot.trans.flush()
+
+    def recv_divide_matriz(self):
+        iprot = self._iprot
+        (fname, mtype, rseqid) = iprot.readMessageBegin()
+        if mtype == TMessageType.EXCEPTION:
+            x = TApplicationException()
+            x.read(iprot)
+            iprot.readMessageEnd()
+            raise x
+        result = divide_matriz_result()
+        result.read(iprot)
+        iprot.readMessageEnd()
+        if result.success is not None:
+            return result.success
+        raise TApplicationException(TApplicationException.MISSING_RESULT, "divide_matriz failed: unknown result")
+
 
 class Processor(Iface, TProcessor):
     def __init__(self, handler):
@@ -252,6 +381,9 @@ class Processor(Iface, TProcessor):
         self._processMap["producto_escalar"] = Processor.process_producto_escalar
         self._processMap["producto_vectorial"] = Processor.process_producto_vectorial
         self._processMap["suma_matriz"] = Processor.process_suma_matriz
+        self._processMap["resta_matriz"] = Processor.process_resta_matriz
+        self._processMap["multiplica_matriz"] = Processor.process_multiplica_matriz
+        self._processMap["divide_matriz"] = Processor.process_divide_matriz
         self._on_message_begin = None
 
     def on_message_begin(self, func):
@@ -389,6 +521,75 @@ class Processor(Iface, TProcessor):
         oprot.writeMessageEnd()
         oprot.trans.flush()
 
+    def process_resta_matriz(self, seqid, iprot, oprot):
+        args = resta_matriz_args()
+        args.read(iprot)
+        iprot.readMessageEnd()
+        result = resta_matriz_result()
+        try:
+            result.success = self._handler.resta_matriz(args.m1, args.m2)
+            msg_type = TMessageType.REPLY
+        except TTransport.TTransportException:
+            raise
+        except TApplicationException as ex:
+            logging.exception('TApplication exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = ex
+        except Exception:
+            logging.exception('Unexpected exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
+        oprot.writeMessageBegin("resta_matriz", msg_type, seqid)
+        result.write(oprot)
+        oprot.writeMessageEnd()
+        oprot.trans.flush()
+
+    def process_multiplica_matriz(self, seqid, iprot, oprot):
+        args = multiplica_matriz_args()
+        args.read(iprot)
+        iprot.readMessageEnd()
+        result = multiplica_matriz_result()
+        try:
+            result.success = self._handler.multiplica_matriz(args.m1, args.m2)
+            msg_type = TMessageType.REPLY
+        except TTransport.TTransportException:
+            raise
+        except TApplicationException as ex:
+            logging.exception('TApplication exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = ex
+        except Exception:
+            logging.exception('Unexpected exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
+        oprot.writeMessageBegin("multiplica_matriz", msg_type, seqid)
+        result.write(oprot)
+        oprot.writeMessageEnd()
+        oprot.trans.flush()
+
+    def process_divide_matriz(self, seqid, iprot, oprot):
+        args = divide_matriz_args()
+        args.read(iprot)
+        iprot.readMessageEnd()
+        result = divide_matriz_result()
+        try:
+            result.success = self._handler.divide_matriz(args.m1, args.m2)
+            msg_type = TMessageType.REPLY
+        except TTransport.TTransportException:
+            raise
+        except TApplicationException as ex:
+            logging.exception('TApplication exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = ex
+        except Exception:
+            logging.exception('Unexpected exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
+        oprot.writeMessageBegin("divide_matriz", msg_type, seqid)
+        result.write(oprot)
+        oprot.writeMessageEnd()
+        oprot.trans.flush()
+
 # HELPER FUNCTIONS AND STRUCTURES
 
 
@@ -417,20 +618,20 @@ class suma_vectorial_args(object):
             if fid == 1:
                 if ftype == TType.LIST:
                     self.v1 = []
-                    (_etype122, _size119) = iprot.readListBegin()
-                    for _i123 in range(_size119):
-                        _elem124 = iprot.readDouble()
-                        self.v1.append(_elem124)
+                    (_etype248, _size245) = iprot.readListBegin()
+                    for _i249 in range(_size245):
+                        _elem250 = iprot.readDouble()
+                        self.v1.append(_elem250)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
                 if ftype == TType.LIST:
                     self.v2 = []
-                    (_etype128, _size125) = iprot.readListBegin()
-                    for _i129 in range(_size125):
-                        _elem130 = iprot.readDouble()
-                        self.v2.append(_elem130)
+                    (_etype254, _size251) = iprot.readListBegin()
+                    for _i255 in range(_size251):
+                        _elem256 = iprot.readDouble()
+                        self.v2.append(_elem256)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -447,15 +648,15 @@ class suma_vectorial_args(object):
         if self.v1 is not None:
             oprot.writeFieldBegin('v1', TType.LIST, 1)
             oprot.writeListBegin(TType.DOUBLE, len(self.v1))
-            for iter131 in self.v1:
-                oprot.writeDouble(iter131)
+            for iter257 in self.v1:
+                oprot.writeDouble(iter257)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         if self.v2 is not None:
             oprot.writeFieldBegin('v2', TType.LIST, 2)
             oprot.writeListBegin(TType.DOUBLE, len(self.v2))
-            for iter132 in self.v2:
-                oprot.writeDouble(iter132)
+            for iter258 in self.v2:
+                oprot.writeDouble(iter258)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -505,10 +706,10 @@ class suma_vectorial_result(object):
             if fid == 0:
                 if ftype == TType.LIST:
                     self.success = []
-                    (_etype136, _size133) = iprot.readListBegin()
-                    for _i137 in range(_size133):
-                        _elem138 = iprot.readDouble()
-                        self.success.append(_elem138)
+                    (_etype262, _size259) = iprot.readListBegin()
+                    for _i263 in range(_size259):
+                        _elem264 = iprot.readDouble()
+                        self.success.append(_elem264)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -525,8 +726,8 @@ class suma_vectorial_result(object):
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.LIST, 0)
             oprot.writeListBegin(TType.DOUBLE, len(self.success))
-            for iter139 in self.success:
-                oprot.writeDouble(iter139)
+            for iter265 in self.success:
+                oprot.writeDouble(iter265)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -576,20 +777,20 @@ class resta_vectorial_args(object):
             if fid == 1:
                 if ftype == TType.LIST:
                     self.v1 = []
-                    (_etype143, _size140) = iprot.readListBegin()
-                    for _i144 in range(_size140):
-                        _elem145 = iprot.readDouble()
-                        self.v1.append(_elem145)
+                    (_etype269, _size266) = iprot.readListBegin()
+                    for _i270 in range(_size266):
+                        _elem271 = iprot.readDouble()
+                        self.v1.append(_elem271)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
                 if ftype == TType.LIST:
                     self.v2 = []
-                    (_etype149, _size146) = iprot.readListBegin()
-                    for _i150 in range(_size146):
-                        _elem151 = iprot.readDouble()
-                        self.v2.append(_elem151)
+                    (_etype275, _size272) = iprot.readListBegin()
+                    for _i276 in range(_size272):
+                        _elem277 = iprot.readDouble()
+                        self.v2.append(_elem277)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -606,15 +807,15 @@ class resta_vectorial_args(object):
         if self.v1 is not None:
             oprot.writeFieldBegin('v1', TType.LIST, 1)
             oprot.writeListBegin(TType.DOUBLE, len(self.v1))
-            for iter152 in self.v1:
-                oprot.writeDouble(iter152)
+            for iter278 in self.v1:
+                oprot.writeDouble(iter278)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         if self.v2 is not None:
             oprot.writeFieldBegin('v2', TType.LIST, 2)
             oprot.writeListBegin(TType.DOUBLE, len(self.v2))
-            for iter153 in self.v2:
-                oprot.writeDouble(iter153)
+            for iter279 in self.v2:
+                oprot.writeDouble(iter279)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -664,10 +865,10 @@ class resta_vectorial_result(object):
             if fid == 0:
                 if ftype == TType.LIST:
                     self.success = []
-                    (_etype157, _size154) = iprot.readListBegin()
-                    for _i158 in range(_size154):
-                        _elem159 = iprot.readDouble()
-                        self.success.append(_elem159)
+                    (_etype283, _size280) = iprot.readListBegin()
+                    for _i284 in range(_size280):
+                        _elem285 = iprot.readDouble()
+                        self.success.append(_elem285)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -684,8 +885,8 @@ class resta_vectorial_result(object):
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.LIST, 0)
             oprot.writeListBegin(TType.DOUBLE, len(self.success))
-            for iter160 in self.success:
-                oprot.writeDouble(iter160)
+            for iter286 in self.success:
+                oprot.writeDouble(iter286)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -735,20 +936,20 @@ class producto_escalar_args(object):
             if fid == 1:
                 if ftype == TType.LIST:
                     self.v1 = []
-                    (_etype164, _size161) = iprot.readListBegin()
-                    for _i165 in range(_size161):
-                        _elem166 = iprot.readDouble()
-                        self.v1.append(_elem166)
+                    (_etype290, _size287) = iprot.readListBegin()
+                    for _i291 in range(_size287):
+                        _elem292 = iprot.readDouble()
+                        self.v1.append(_elem292)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
                 if ftype == TType.LIST:
                     self.v2 = []
-                    (_etype170, _size167) = iprot.readListBegin()
-                    for _i171 in range(_size167):
-                        _elem172 = iprot.readDouble()
-                        self.v2.append(_elem172)
+                    (_etype296, _size293) = iprot.readListBegin()
+                    for _i297 in range(_size293):
+                        _elem298 = iprot.readDouble()
+                        self.v2.append(_elem298)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -765,15 +966,15 @@ class producto_escalar_args(object):
         if self.v1 is not None:
             oprot.writeFieldBegin('v1', TType.LIST, 1)
             oprot.writeListBegin(TType.DOUBLE, len(self.v1))
-            for iter173 in self.v1:
-                oprot.writeDouble(iter173)
+            for iter299 in self.v1:
+                oprot.writeDouble(iter299)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         if self.v2 is not None:
             oprot.writeFieldBegin('v2', TType.LIST, 2)
             oprot.writeListBegin(TType.DOUBLE, len(self.v2))
-            for iter174 in self.v2:
-                oprot.writeDouble(iter174)
+            for iter300 in self.v2:
+                oprot.writeDouble(iter300)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -886,20 +1087,20 @@ class producto_vectorial_args(object):
             if fid == 1:
                 if ftype == TType.LIST:
                     self.v1 = []
-                    (_etype178, _size175) = iprot.readListBegin()
-                    for _i179 in range(_size175):
-                        _elem180 = iprot.readDouble()
-                        self.v1.append(_elem180)
+                    (_etype304, _size301) = iprot.readListBegin()
+                    for _i305 in range(_size301):
+                        _elem306 = iprot.readDouble()
+                        self.v1.append(_elem306)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
                 if ftype == TType.LIST:
                     self.v2 = []
-                    (_etype184, _size181) = iprot.readListBegin()
-                    for _i185 in range(_size181):
-                        _elem186 = iprot.readDouble()
-                        self.v2.append(_elem186)
+                    (_etype310, _size307) = iprot.readListBegin()
+                    for _i311 in range(_size307):
+                        _elem312 = iprot.readDouble()
+                        self.v2.append(_elem312)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -916,15 +1117,15 @@ class producto_vectorial_args(object):
         if self.v1 is not None:
             oprot.writeFieldBegin('v1', TType.LIST, 1)
             oprot.writeListBegin(TType.DOUBLE, len(self.v1))
-            for iter187 in self.v1:
-                oprot.writeDouble(iter187)
+            for iter313 in self.v1:
+                oprot.writeDouble(iter313)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         if self.v2 is not None:
             oprot.writeFieldBegin('v2', TType.LIST, 2)
             oprot.writeListBegin(TType.DOUBLE, len(self.v2))
-            for iter188 in self.v2:
-                oprot.writeDouble(iter188)
+            for iter314 in self.v2:
+                oprot.writeDouble(iter314)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -974,10 +1175,10 @@ class producto_vectorial_result(object):
             if fid == 0:
                 if ftype == TType.LIST:
                     self.success = []
-                    (_etype192, _size189) = iprot.readListBegin()
-                    for _i193 in range(_size189):
-                        _elem194 = iprot.readDouble()
-                        self.success.append(_elem194)
+                    (_etype318, _size315) = iprot.readListBegin()
+                    for _i319 in range(_size315):
+                        _elem320 = iprot.readDouble()
+                        self.success.append(_elem320)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -994,8 +1195,8 @@ class producto_vectorial_result(object):
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.LIST, 0)
             oprot.writeListBegin(TType.DOUBLE, len(self.success))
-            for iter195 in self.success:
-                oprot.writeDouble(iter195)
+            for iter321 in self.success:
+                oprot.writeDouble(iter321)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -1045,30 +1246,30 @@ class suma_matriz_args(object):
             if fid == 1:
                 if ftype == TType.LIST:
                     self.m1 = []
-                    (_etype199, _size196) = iprot.readListBegin()
-                    for _i200 in range(_size196):
-                        _elem201 = []
-                        (_etype205, _size202) = iprot.readListBegin()
-                        for _i206 in range(_size202):
-                            _elem207 = iprot.readDouble()
-                            _elem201.append(_elem207)
+                    (_etype325, _size322) = iprot.readListBegin()
+                    for _i326 in range(_size322):
+                        _elem327 = []
+                        (_etype331, _size328) = iprot.readListBegin()
+                        for _i332 in range(_size328):
+                            _elem333 = iprot.readDouble()
+                            _elem327.append(_elem333)
                         iprot.readListEnd()
-                        self.m1.append(_elem201)
+                        self.m1.append(_elem327)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
                 if ftype == TType.LIST:
                     self.m2 = []
-                    (_etype211, _size208) = iprot.readListBegin()
-                    for _i212 in range(_size208):
-                        _elem213 = []
-                        (_etype217, _size214) = iprot.readListBegin()
-                        for _i218 in range(_size214):
-                            _elem219 = iprot.readDouble()
-                            _elem213.append(_elem219)
+                    (_etype337, _size334) = iprot.readListBegin()
+                    for _i338 in range(_size334):
+                        _elem339 = []
+                        (_etype343, _size340) = iprot.readListBegin()
+                        for _i344 in range(_size340):
+                            _elem345 = iprot.readDouble()
+                            _elem339.append(_elem345)
                         iprot.readListEnd()
-                        self.m2.append(_elem213)
+                        self.m2.append(_elem339)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -1085,20 +1286,20 @@ class suma_matriz_args(object):
         if self.m1 is not None:
             oprot.writeFieldBegin('m1', TType.LIST, 1)
             oprot.writeListBegin(TType.LIST, len(self.m1))
-            for iter220 in self.m1:
-                oprot.writeListBegin(TType.DOUBLE, len(iter220))
-                for iter221 in iter220:
-                    oprot.writeDouble(iter221)
+            for iter346 in self.m1:
+                oprot.writeListBegin(TType.DOUBLE, len(iter346))
+                for iter347 in iter346:
+                    oprot.writeDouble(iter347)
                 oprot.writeListEnd()
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         if self.m2 is not None:
             oprot.writeFieldBegin('m2', TType.LIST, 2)
             oprot.writeListBegin(TType.LIST, len(self.m2))
-            for iter222 in self.m2:
-                oprot.writeListBegin(TType.DOUBLE, len(iter222))
-                for iter223 in iter222:
-                    oprot.writeDouble(iter223)
+            for iter348 in self.m2:
+                oprot.writeListBegin(TType.DOUBLE, len(iter348))
+                for iter349 in iter348:
+                    oprot.writeDouble(iter349)
                 oprot.writeListEnd()
             oprot.writeListEnd()
             oprot.writeFieldEnd()
@@ -1149,15 +1350,15 @@ class suma_matriz_result(object):
             if fid == 0:
                 if ftype == TType.LIST:
                     self.success = []
-                    (_etype227, _size224) = iprot.readListBegin()
-                    for _i228 in range(_size224):
-                        _elem229 = []
-                        (_etype233, _size230) = iprot.readListBegin()
-                        for _i234 in range(_size230):
-                            _elem235 = iprot.readDouble()
-                            _elem229.append(_elem235)
+                    (_etype353, _size350) = iprot.readListBegin()
+                    for _i354 in range(_size350):
+                        _elem355 = []
+                        (_etype359, _size356) = iprot.readListBegin()
+                        for _i360 in range(_size356):
+                            _elem361 = iprot.readDouble()
+                            _elem355.append(_elem361)
                         iprot.readListEnd()
-                        self.success.append(_elem229)
+                        self.success.append(_elem355)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -1174,10 +1375,10 @@ class suma_matriz_result(object):
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.LIST, 0)
             oprot.writeListBegin(TType.LIST, len(self.success))
-            for iter236 in self.success:
-                oprot.writeListBegin(TType.DOUBLE, len(iter236))
-                for iter237 in iter236:
-                    oprot.writeDouble(iter237)
+            for iter362 in self.success:
+                oprot.writeListBegin(TType.DOUBLE, len(iter362))
+                for iter363 in iter362:
+                    oprot.writeDouble(iter363)
                 oprot.writeListEnd()
             oprot.writeListEnd()
             oprot.writeFieldEnd()
@@ -1199,6 +1400,555 @@ class suma_matriz_result(object):
         return not (self == other)
 all_structs.append(suma_matriz_result)
 suma_matriz_result.thrift_spec = (
+    (0, TType.LIST, 'success', (TType.LIST, (TType.DOUBLE, None, False), False), None, ),  # 0
+)
+
+
+class resta_matriz_args(object):
+    """
+    Attributes:
+     - m1
+     - m2
+
+    """
+
+
+    def __init__(self, m1=None, m2=None,):
+        self.m1 = m1
+        self.m2 = m2
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.LIST:
+                    self.m1 = []
+                    (_etype367, _size364) = iprot.readListBegin()
+                    for _i368 in range(_size364):
+                        _elem369 = []
+                        (_etype373, _size370) = iprot.readListBegin()
+                        for _i374 in range(_size370):
+                            _elem375 = iprot.readDouble()
+                            _elem369.append(_elem375)
+                        iprot.readListEnd()
+                        self.m1.append(_elem369)
+                    iprot.readListEnd()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 2:
+                if ftype == TType.LIST:
+                    self.m2 = []
+                    (_etype379, _size376) = iprot.readListBegin()
+                    for _i380 in range(_size376):
+                        _elem381 = []
+                        (_etype385, _size382) = iprot.readListBegin()
+                        for _i386 in range(_size382):
+                            _elem387 = iprot.readDouble()
+                            _elem381.append(_elem387)
+                        iprot.readListEnd()
+                        self.m2.append(_elem381)
+                    iprot.readListEnd()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('resta_matriz_args')
+        if self.m1 is not None:
+            oprot.writeFieldBegin('m1', TType.LIST, 1)
+            oprot.writeListBegin(TType.LIST, len(self.m1))
+            for iter388 in self.m1:
+                oprot.writeListBegin(TType.DOUBLE, len(iter388))
+                for iter389 in iter388:
+                    oprot.writeDouble(iter389)
+                oprot.writeListEnd()
+            oprot.writeListEnd()
+            oprot.writeFieldEnd()
+        if self.m2 is not None:
+            oprot.writeFieldBegin('m2', TType.LIST, 2)
+            oprot.writeListBegin(TType.LIST, len(self.m2))
+            for iter390 in self.m2:
+                oprot.writeListBegin(TType.DOUBLE, len(iter390))
+                for iter391 in iter390:
+                    oprot.writeDouble(iter391)
+                oprot.writeListEnd()
+            oprot.writeListEnd()
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(resta_matriz_args)
+resta_matriz_args.thrift_spec = (
+    None,  # 0
+    (1, TType.LIST, 'm1', (TType.LIST, (TType.DOUBLE, None, False), False), None, ),  # 1
+    (2, TType.LIST, 'm2', (TType.LIST, (TType.DOUBLE, None, False), False), None, ),  # 2
+)
+
+
+class resta_matriz_result(object):
+    """
+    Attributes:
+     - success
+
+    """
+
+
+    def __init__(self, success=None,):
+        self.success = success
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 0:
+                if ftype == TType.LIST:
+                    self.success = []
+                    (_etype395, _size392) = iprot.readListBegin()
+                    for _i396 in range(_size392):
+                        _elem397 = []
+                        (_etype401, _size398) = iprot.readListBegin()
+                        for _i402 in range(_size398):
+                            _elem403 = iprot.readDouble()
+                            _elem397.append(_elem403)
+                        iprot.readListEnd()
+                        self.success.append(_elem397)
+                    iprot.readListEnd()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('resta_matriz_result')
+        if self.success is not None:
+            oprot.writeFieldBegin('success', TType.LIST, 0)
+            oprot.writeListBegin(TType.LIST, len(self.success))
+            for iter404 in self.success:
+                oprot.writeListBegin(TType.DOUBLE, len(iter404))
+                for iter405 in iter404:
+                    oprot.writeDouble(iter405)
+                oprot.writeListEnd()
+            oprot.writeListEnd()
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(resta_matriz_result)
+resta_matriz_result.thrift_spec = (
+    (0, TType.LIST, 'success', (TType.LIST, (TType.DOUBLE, None, False), False), None, ),  # 0
+)
+
+
+class multiplica_matriz_args(object):
+    """
+    Attributes:
+     - m1
+     - m2
+
+    """
+
+
+    def __init__(self, m1=None, m2=None,):
+        self.m1 = m1
+        self.m2 = m2
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.LIST:
+                    self.m1 = []
+                    (_etype409, _size406) = iprot.readListBegin()
+                    for _i410 in range(_size406):
+                        _elem411 = []
+                        (_etype415, _size412) = iprot.readListBegin()
+                        for _i416 in range(_size412):
+                            _elem417 = iprot.readDouble()
+                            _elem411.append(_elem417)
+                        iprot.readListEnd()
+                        self.m1.append(_elem411)
+                    iprot.readListEnd()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 2:
+                if ftype == TType.LIST:
+                    self.m2 = []
+                    (_etype421, _size418) = iprot.readListBegin()
+                    for _i422 in range(_size418):
+                        _elem423 = []
+                        (_etype427, _size424) = iprot.readListBegin()
+                        for _i428 in range(_size424):
+                            _elem429 = iprot.readDouble()
+                            _elem423.append(_elem429)
+                        iprot.readListEnd()
+                        self.m2.append(_elem423)
+                    iprot.readListEnd()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('multiplica_matriz_args')
+        if self.m1 is not None:
+            oprot.writeFieldBegin('m1', TType.LIST, 1)
+            oprot.writeListBegin(TType.LIST, len(self.m1))
+            for iter430 in self.m1:
+                oprot.writeListBegin(TType.DOUBLE, len(iter430))
+                for iter431 in iter430:
+                    oprot.writeDouble(iter431)
+                oprot.writeListEnd()
+            oprot.writeListEnd()
+            oprot.writeFieldEnd()
+        if self.m2 is not None:
+            oprot.writeFieldBegin('m2', TType.LIST, 2)
+            oprot.writeListBegin(TType.LIST, len(self.m2))
+            for iter432 in self.m2:
+                oprot.writeListBegin(TType.DOUBLE, len(iter432))
+                for iter433 in iter432:
+                    oprot.writeDouble(iter433)
+                oprot.writeListEnd()
+            oprot.writeListEnd()
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(multiplica_matriz_args)
+multiplica_matriz_args.thrift_spec = (
+    None,  # 0
+    (1, TType.LIST, 'm1', (TType.LIST, (TType.DOUBLE, None, False), False), None, ),  # 1
+    (2, TType.LIST, 'm2', (TType.LIST, (TType.DOUBLE, None, False), False), None, ),  # 2
+)
+
+
+class multiplica_matriz_result(object):
+    """
+    Attributes:
+     - success
+
+    """
+
+
+    def __init__(self, success=None,):
+        self.success = success
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 0:
+                if ftype == TType.LIST:
+                    self.success = []
+                    (_etype437, _size434) = iprot.readListBegin()
+                    for _i438 in range(_size434):
+                        _elem439 = []
+                        (_etype443, _size440) = iprot.readListBegin()
+                        for _i444 in range(_size440):
+                            _elem445 = iprot.readDouble()
+                            _elem439.append(_elem445)
+                        iprot.readListEnd()
+                        self.success.append(_elem439)
+                    iprot.readListEnd()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('multiplica_matriz_result')
+        if self.success is not None:
+            oprot.writeFieldBegin('success', TType.LIST, 0)
+            oprot.writeListBegin(TType.LIST, len(self.success))
+            for iter446 in self.success:
+                oprot.writeListBegin(TType.DOUBLE, len(iter446))
+                for iter447 in iter446:
+                    oprot.writeDouble(iter447)
+                oprot.writeListEnd()
+            oprot.writeListEnd()
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(multiplica_matriz_result)
+multiplica_matriz_result.thrift_spec = (
+    (0, TType.LIST, 'success', (TType.LIST, (TType.DOUBLE, None, False), False), None, ),  # 0
+)
+
+
+class divide_matriz_args(object):
+    """
+    Attributes:
+     - m1
+     - m2
+
+    """
+
+
+    def __init__(self, m1=None, m2=None,):
+        self.m1 = m1
+        self.m2 = m2
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.LIST:
+                    self.m1 = []
+                    (_etype451, _size448) = iprot.readListBegin()
+                    for _i452 in range(_size448):
+                        _elem453 = []
+                        (_etype457, _size454) = iprot.readListBegin()
+                        for _i458 in range(_size454):
+                            _elem459 = iprot.readDouble()
+                            _elem453.append(_elem459)
+                        iprot.readListEnd()
+                        self.m1.append(_elem453)
+                    iprot.readListEnd()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 2:
+                if ftype == TType.LIST:
+                    self.m2 = []
+                    (_etype463, _size460) = iprot.readListBegin()
+                    for _i464 in range(_size460):
+                        _elem465 = []
+                        (_etype469, _size466) = iprot.readListBegin()
+                        for _i470 in range(_size466):
+                            _elem471 = iprot.readDouble()
+                            _elem465.append(_elem471)
+                        iprot.readListEnd()
+                        self.m2.append(_elem465)
+                    iprot.readListEnd()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('divide_matriz_args')
+        if self.m1 is not None:
+            oprot.writeFieldBegin('m1', TType.LIST, 1)
+            oprot.writeListBegin(TType.LIST, len(self.m1))
+            for iter472 in self.m1:
+                oprot.writeListBegin(TType.DOUBLE, len(iter472))
+                for iter473 in iter472:
+                    oprot.writeDouble(iter473)
+                oprot.writeListEnd()
+            oprot.writeListEnd()
+            oprot.writeFieldEnd()
+        if self.m2 is not None:
+            oprot.writeFieldBegin('m2', TType.LIST, 2)
+            oprot.writeListBegin(TType.LIST, len(self.m2))
+            for iter474 in self.m2:
+                oprot.writeListBegin(TType.DOUBLE, len(iter474))
+                for iter475 in iter474:
+                    oprot.writeDouble(iter475)
+                oprot.writeListEnd()
+            oprot.writeListEnd()
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(divide_matriz_args)
+divide_matriz_args.thrift_spec = (
+    None,  # 0
+    (1, TType.LIST, 'm1', (TType.LIST, (TType.DOUBLE, None, False), False), None, ),  # 1
+    (2, TType.LIST, 'm2', (TType.LIST, (TType.DOUBLE, None, False), False), None, ),  # 2
+)
+
+
+class divide_matriz_result(object):
+    """
+    Attributes:
+     - success
+
+    """
+
+
+    def __init__(self, success=None,):
+        self.success = success
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 0:
+                if ftype == TType.LIST:
+                    self.success = []
+                    (_etype479, _size476) = iprot.readListBegin()
+                    for _i480 in range(_size476):
+                        _elem481 = []
+                        (_etype485, _size482) = iprot.readListBegin()
+                        for _i486 in range(_size482):
+                            _elem487 = iprot.readDouble()
+                            _elem481.append(_elem487)
+                        iprot.readListEnd()
+                        self.success.append(_elem481)
+                    iprot.readListEnd()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('divide_matriz_result')
+        if self.success is not None:
+            oprot.writeFieldBegin('success', TType.LIST, 0)
+            oprot.writeListBegin(TType.LIST, len(self.success))
+            for iter488 in self.success:
+                oprot.writeListBegin(TType.DOUBLE, len(iter488))
+                for iter489 in iter488:
+                    oprot.writeDouble(iter489)
+                oprot.writeListEnd()
+            oprot.writeListEnd()
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(divide_matriz_result)
+divide_matriz_result.thrift_spec = (
     (0, TType.LIST, 'success', (TType.LIST, (TType.DOUBLE, None, False), False), None, ),  # 0
 )
 fix_spec(all_structs)

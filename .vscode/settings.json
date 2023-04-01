@@ -1,0 +1,8 @@
+{
+    "python.pythonPath": "/usr/bin/python",
+    "python.analysis.extraPaths": [
+        "./practica-2-2-codigo/gen-py"
+    ],
+    "python.analysis.typeCheckingMode": "off",
+    "python.terminal.activateEnvironment": true
+}

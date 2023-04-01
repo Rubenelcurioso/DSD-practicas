@@ -45,6 +45,8 @@ class CalculadoraHandler:
         return n1 * n2
     
     def divida(self, n1, n2):
+        if(n2==0):
+            raise("No se puede dividir por 0")
         print("dividiendo " + str(n1) + " con " + str(n2))
         return n1 / n2 #Divisón entera
     
@@ -84,6 +86,30 @@ class CalculadoraHandler:
         self.transporte.open()
         print("Conectando con un servidor más avanzado...")
         resultado = self.server_client.suma_matriz(m1,m2)
+        print("Obtenida respuesta!")
+        self.transporte.close()
+        return resultado
+
+    def resta_matriz(self,m1,m2):
+        self.transporte.open()
+        print("Conectando con un servidor más avanzado...")
+        resultado = self.server_client.resta_matriz(m1,m2)
+        print("Obtenida respuesta!")
+        self.transporte.close()
+        return resultado
+
+    def multiplica_matriz(self,m1,m2):
+        self.transporte.open()
+        print("Conectando con un servidor más avanzado...")
+        resultado = self.server_client.multiplica_matriz(m1,m2)
+        print("Obtenida respuesta!")
+        self.transporte.close()
+        return resultado
+
+    def divide_matriz(self,m1,m2):
+        self.transporte.open()
+        print("Conectando con un servidor más avanzado...")
+        resultado = self.server_client.divide_matriz(m1,m2)
         print("Obtenida respuesta!")
         self.transporte.close()
         return resultado
