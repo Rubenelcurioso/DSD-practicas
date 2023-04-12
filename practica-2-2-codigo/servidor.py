@@ -45,8 +45,8 @@ class CalculadoraHandler:
         return n1 * n2
     
     def divida(self, n1, n2):
-        if(n2==0):
-            raise("No se puede dividir por 0")
+        if n2==0:
+            raise ZeroDivisionError("No se puede dividir por 0")
         print("dividiendo " + str(n1) + " con " + str(n2))
         return n1 / n2 #Divisón entera
     

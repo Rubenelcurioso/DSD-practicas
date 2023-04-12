@@ -19,6 +19,8 @@ class CalculadoraAvanzadaHandler:
         self.log = {}
 
     def suma_vectorial(self,v1,v2):
+        if len(v1) != len(v2):
+            raise ValueError("Los vectores deben tener misma dimension")
         print("Calculando suma")
         resultado = list()
         for i in range(0,len(v1)):
@@ -26,6 +28,8 @@ class CalculadoraAvanzadaHandler:
         return resultado
     
     def resta_vectorial(self,v1,v2):
+        if len(v1) != len(v2):
+            raise ValueError("Los vectores deben tener misma dimension")
         print("Calculando resta")
         resultado = list()
         for i in range(0,len(v1)):
@@ -33,6 +37,8 @@ class CalculadoraAvanzadaHandler:
         return resultado
 
     def producto_escalar(self,v1, v2):
+        if len(v1) != len(v2):
+            raise ValueError("Los vectores deben tener misma dimension")
         print("Calculando producto escalar")
         resultado = 0.0
         for i in range(0,len(v1)):
@@ -40,6 +46,8 @@ class CalculadoraAvanzadaHandler:
         return resultado
     
     def producto_vectorial(self,v1, v2):
+        if len(v1) != 3 or len(v2) != 3:
+            raise ValueError("Los vectores deben ser 3 dimensiones")
         print("Calculando producto vectorial")
         resultado = list()
         resultado.append(v1[1]*v2[2]-v1[2]*v2[1])
@@ -51,7 +59,6 @@ class CalculadoraAvanzadaHandler:
         print("Calculando suma de matrices")
         if len(m1) != len(m2) or len(m1[0]) != len(m2[0]):
             raise ValueError("Las matrices deben tener las mismas dimensiones")
-        
         resultado = [[0 for j in range(len(m1[i]))] for i in range(len(m1))] # inicializar resultado como una matriz de ceros
         for i in range(len(m1)):
             for j in range(len(m1[i])):
